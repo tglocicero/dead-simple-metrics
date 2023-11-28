@@ -1,0 +1,19 @@
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+<form method="POST" action="/success" enctype="multipart/form-data">
+    <!-- File Upload-->
+    <div class="form-group">
+        <label for="inputFile">File input</label>
+        <input class="form-control-file" type="file" name="inputFile">
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+    {% for file in files %}
+        <br>
+        {{ file.name }} {{ file.rendered_data }}
+        <img src="data:image/png;base64,{{ file.rendered_data }}" width="50%" height="50%" />
+    {% endfor %}
+</form>
