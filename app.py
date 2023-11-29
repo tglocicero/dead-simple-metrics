@@ -7,12 +7,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+basedir = os.path.abspath(os.path.dirname("__file__"))
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'secret_key'
+
+UPLOAD_FOLDER = os.path.join(basedir, "uploads")
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -38,6 +42,8 @@ def render_picture(data):
 @app.route('/success', methods=['POST'])
 def success():
     file = request.files['inputFile']
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+
     data = file.read()
     render_file = render_picture(data)
 
